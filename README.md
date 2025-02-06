@@ -56,18 +56,21 @@ fasta_filtered = remove_reference_sequences(fasta_file_path = input_fasta)
 # check eligibility
 eligibile = check_eligibility(dna_bin = fasta_filtered, min_sequence_count = 2, min_seq_width = 9)
 
-# calculate distance
+# calculate divergence, using different distance metrics
 dist_rawMPD = calculate_distance(dna_bin = fasta_filtered, distance_metric = "rawMPD", min_sequence_count = 2, min_seq_width = 9)
-
+dist_tn93MPD = calculate_distance(dna_bin = fasta_filtered, distance_metric = "tn93MPD", min_sequence_count = 2, min_seq_width = 9)
+dist_rawPI = calculate_distance(dna_bin = fasta_filtered, distance_metric = "rawPI", min_sequence_count = 2, min_seq_width = 9)
+dist_tn93PI = calculate_distance(dna_bin = fasta_filtered, distance_metric = "tn93PI", min_sequence_count = 2, min_seq_width = 9)
 dist_WFPS = calculate_distance(dna_bin  =  fasta_filtered, distance_metric  =  "WFPS", min_sequence_count = 2, min_seq_width = 9, errorthreshold = 0, variants = c("A","C","G","T","-"))
+dist_WFPS_codons = calculate_distance(dna_bin  =  fasta_filtered, distance_metric  =  "WFPS_codons", min_sequence_count = 2, min_seq_width = 9, errorthreshold = 0, variants = c("A","C","G","T","-"))
 
-# estimate time since infection (and credible intervals), using different distance metrics
+# estimate time since infection (and credible intervals), using the different distance metrics
 ## we expect the credible intervals to have substantial overlap for most of these distance metrics
-TSI_rawMPD = predict_TSI(hiv_region = "Gagp17Matrix", distance_metric = "rawMPD", x_new = 0.003)
-TSI_tn93MPD = predict_TSI(hiv_region = "Gagp17Matrix", distance_metric = "tn93MPD", x_new = 0.003)
-TSI_rawPI = predict_TSI(hiv_region = "Gagp17Matrix", distance_metric = "rawPI", x_new = 0.003)
-TSI_tn93PI = predict_TSI(hiv_region = "Gagp17Matrix", distance_metric = "tn93PI", x_new = 0.003)
-TSI_WFPS = predict_TSI(hiv_region = "Gagp17Matrix", distance_metric = "WFPS", x_new = 0.003)
-TSI_WFPS_codons = predict_TSI(hiv_region = "Gagp17Matrix", distance_metric = "WFPS_codons", x_new = 0.003)
+TSI_rawMPD = predict_TSI(hiv_region = "Gagp17Matrix", distance_metric = "rawMPD", x_new = dist_rawMPD)
+TSI_tn93MPD = predict_TSI(hiv_region = "Gagp17Matrix", distance_metric = "tn93MPD", x_new = dist_tn93MPD)
+TSI_rawPI = predict_TSI(hiv_region = "Gagp17Matrix", distance_metric = "rawPI", x_new = dist_rawPI)
+TSI_tn93PI = predict_TSI(hiv_region = "Gagp17Matrix", distance_metric = "tn93PI", x_new = dist_tn93PI)
+TSI_WFPS = predict_TSI(hiv_region = "Gagp17Matrix", distance_metric = "WFPS", x_new = dist_WFPS)
+TSI_WFPS_codons = predict_TSI(hiv_region = "Gagp17Matrix", distance_metric = "WFPS_codons", x_new = dist_WFPS_codons)
 ```
 
