@@ -40,6 +40,7 @@ This is a basic example which shows you how to solve a common problem:
 ``` r
 library(viremictimepredicteR)
 ## specify the input fasta file
+## preferably, this input file should be codon-alined and trimmed to a specific hiv region e.g., using the genecutter tool from los-alamos hiv website, or a similar tool.
 input_fasta = "data/example_GAG_P17.fasta"
 
 ## load fasta file and remove reference sequences if any (sequences with pattern "Ref", or "HXB2" in the headers)
