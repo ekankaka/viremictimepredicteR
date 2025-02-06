@@ -40,12 +40,12 @@ This is a basic example which shows you how to solve a common problem:
 ``` r
 library(viremictimepredicteR)
 ## specify the input fasta file
-## preferably, this input file should:
-## -be codon-alined and 
-## -trimmed to a specific hiv region (e.g., using the genecutter tool from los-alamos hiv website, or a similar tool).
-## - filtered for hypermutation
-## - each sequence should include >75% non-gap characters across the width of the alignment.
-## - contain a minimum of two eligible sequences as per the above criteria (excluding reference sequences)
+## preferably, this input fasta file should:
+## - be codon-alined 
+## - trimmed to a specific hiv region (e.g., using the genecutter tool from los-alamos hiv website, or a similar tool).
+## - filtered for APOBEC-induced G to A hypermutation
+## - each sequence should include >=75% non-gap nucleotide characters (A,C,G,T) across the width of the alignment.
+## - contain a minimum of two eligible sequences as per the above criteria, excluding reference sequence(s).
 input_fasta = "data/example_GAG_P17.fasta"
 
 ## load fasta file and remove reference sequences if any (sequences with pattern "Ref", or "HXB2" in the headers)
