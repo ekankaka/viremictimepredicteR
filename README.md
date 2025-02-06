@@ -46,6 +46,7 @@ library(viremictimepredicteR)
 ## - be codon-alined 
 ## - trimmed to a specific hiv region (e.g., using the genecutter tool from los-alamos hiv website, or a similar tool).
 ## - filtered for APOBEC-induced G to A hypermutation
+## - checked to rule out possibility of dual (or multiple) infections
 ## - each sequence should include at least 75% non-gap nucleotide characters (A,C,G,T) across the width of the alignment.
 ## - contain a minimum of two eligible sequences as per the above criteria, excluding reference sequence(s).
 input_fasta = "data/example_GAG_P17.fasta"
