@@ -40,7 +40,7 @@ This is a basic example which shows you how to solve a common problem:
 ``` r
 library(viremictimepredicteR)
 ## specify the input fasta file
-## preferably, this input fasta file should:
+## preferably, sequences in this input fasta file should:
 ## - be codon-alined 
 ## - trimmed to a specific hiv region (e.g., using the genecutter tool from los-alamos hiv website, or a similar tool).
 ## - filtered for APOBEC-induced G to A hypermutation
