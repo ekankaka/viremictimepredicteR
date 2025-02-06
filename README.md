@@ -61,8 +61,13 @@ dist_rawMPD = calculate_distance(dna_bin = fasta_filtered, distance_metric = "ra
 
 dist_WFPS = calculate_distance(dna_bin  =  fasta_filtered, distance_metric  =  "WFPS", min_sequence_count = 2, min_seq_width = 9, errorthreshold = 0, variants = c("A","C","G","T","-"))
 
-# predict time since infection (and credible intervals)
+# estimate time since infection (and credible intervals), using different distance metrics
+## we expect the credible intervals to have substantial overlap for most of these distance metrics
 TSI_rawMPD = predict_TSI(hiv_region = "Gagp17Matrix", distance_metric = "rawMPD", x_new = 0.003)
+TSI_tn93MPD = predict_TSI(hiv_region = "Gagp17Matrix", distance_metric = "tn93MPD", x_new = 0.003)
+TSI_rawPI = predict_TSI(hiv_region = "Gagp17Matrix", distance_metric = "rawPI", x_new = 0.003)
+TSI_tn93PI = predict_TSI(hiv_region = "Gagp17Matrix", distance_metric = "tn93PI", x_new = 0.003)
 TSI_WFPS = predict_TSI(hiv_region = "Gagp17Matrix", distance_metric = "WFPS", x_new = 0.003)
+TSI_WFPS_codons = predict_TSI(hiv_region = "Gagp17Matrix", distance_metric = "WFPS_codons", x_new = 0.003)
 ```
 
