@@ -4,7 +4,7 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of viremictimepredicteR is to calculate diversity for a specified region of aligned HIV proviral sequences, and use this diversity to estimate time since infection.
+The goal of viremictimepredicteR is to calculate diversity for a specified region of aligned HIV proviral sequences, and use this diversity to predict time since infection. Predictions are based on markov chain monte carlo samples from Bayesian models fitted by the authors, for these regions and distance metrics. Predictions include a mean estimate and a 95% credible interval, based on intercepts and slopes from the posterior distribution of a simple linear regression model.
 
 The currently supported hiv_regions (selected due to better performance) include:
 - Envgp120V5
@@ -53,7 +53,7 @@ dist_rawMPD = calculate_distance(dna_bin = fasta_filtered, distance_metric = "ra
 
 dist_WFPS = calculate_distance(dna_bin  =  fasta_filtered, distance_metric  =  "WFPS", min_sequence_count = 2, min_seq_width = 9, errorthreshold = 0, variants = c("A","C","G","T","-"))
 
-# predict time since infection
+# predict time since infection (and credible intervals)
 TSI_rawMPD = predict_TSI(hiv_region = "Gagp17Matrix", distance_metric = "rawMPD", x_new = 0.003)
 TSI_WFPS = predict_TSI(hiv_region = "Gagp17Matrix", distance_metric = "WFPS", x_new = 0.003)
 ```
