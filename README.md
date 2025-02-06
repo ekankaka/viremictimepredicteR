@@ -23,7 +23,7 @@ Currently supported measures of proviral diversity include:
 Note: For WFPS and WFPS_codons, variants and errorthreshold must be specified. For example:
 - variants = c("A","C","G","T","-"), 
 - errorthreshold = 0 (for prominent outgrowth viruses )
-- errorthreshold = 0 (for usual NGS e.g proviral DNA sequences that are not outgrowth)
+- errorthreshold = 0.01 (for usual NGS e.g proviral DNA sequences that are not outgrowth)
 
 ## Installation
 
