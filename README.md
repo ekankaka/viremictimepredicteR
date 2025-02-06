@@ -38,7 +38,9 @@ devtools::install_github("ekankaka/viremictimepredicteR")
 This is a basic example which shows you how to solve a common problem:
 
 ``` r
+## load package
 library(viremictimepredicteR)
+
 ## specify the input fasta file
 ## preferably, sequences in this input fasta file should:
 ## - be codon-alined 
