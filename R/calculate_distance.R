@@ -32,7 +32,6 @@ library(rjags)
 #' @return distance as a numeric value.
 #' @examples
 #' dist_rawMPD <- calculate_distance(dna_bin, "rawMPD", 2, 9)
-#' dist_WFPS <- calculate_distance(dna_bin, "WFPS", 2, 9, 0, c("A","C","G","T","-"))
 #'
 #' @export
 calculate_distance <- function(dna_bin, distance_metric,

@@ -7,7 +7,6 @@
 The goal of viremictimepredicteR is to calculate diversity for a specified region of aligned HIV proviral sequences, and use this diversity to predict time since infection. Predictions are based on markov chain monte carlo samples from Bayesian models fitted by the authors, for these regions and distance metrics. Predictions include a mean estimate and a 95% credible interval, based on intercepts and slopes from the posterior distribution of a simple linear regression model.
 
 The currently supported hiv_regions (selected due to better performance) include:
-- Envgp120V5
 - Polp51RT
 - Gagp17Matrix
 - Envgp41
@@ -17,10 +16,12 @@ Currently supported measures of proviral diversity include:
 - mean pairwise distance from the "TN93" model (tn93MPD)
 - nucleotide diversity from the "raw" model (rawPI)
 - nucleotide diversity from the "TN93" model (tn93PI)
-- weighted fraction of polymorphic sites (WFPS)
-- WFPS at third codon positions only (WFPS_codons)
+- weighted fraction of polymorphic sites (WFPS). Available but not recommended for viremic time prediction.
+- WFPS at third codon positions only (WFPS_codons). 
 
-Note: For WFPS and WFPS_codons, variants and errorthreshold must be specified. For example:
+Note: *WFPS and WFPS_codons are available but not recommended for viremic time prediction*.
+In these cases, variants and errorthreshold must be specified. 
+ For example:
 - variants = c("A","C","G","T","-"), 
 - errorthreshold = 0 (for prominent outgrowth viruses )
 - errorthreshold = 0.01 (for usual NGS e.g proviral DNA sequences that are not outgrowth)

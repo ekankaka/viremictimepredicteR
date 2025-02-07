@@ -11,7 +11,6 @@ library(rjags)
 #' This function selects markov chain monte carlo posterior samples,
 #' for the specified HIV region and distance metric.
 #' @param hiv_region. Character. Currently supported HIV hiv_regions (selected due to better performance) include:
-#' - Envgp120V5
 #' - Polp51RT
 #' - Gagp17Matrix
 #' - Envgp41
@@ -20,14 +19,13 @@ library(rjags)
 #' - mean pairwise distance from the "TN93" model (tn93MPD)
 #' - nucleotide diversity from the "raw" model (rawPI)
 #' - nucleotide diversity from the "TN93" model (tn93PI)
-#' - weighted fraction of polymorphic sites (WFPS)
-#' - WFPS at third codon positions only (WFPS_codons)
+#' - weighted fraction of polymorphic sites (WFPS). Available but not recommended for viremic time prediction.
+#' - WFPS at third codon positions only (WFPS_codons). Available but not recommended for viremic time prediction.
 #' @param x_new. Numeric. distance to be used to estimate time since infection.
 #'
 #' @return predicted, lower bound of 95% credible interval, upper bound of 95% credible interval.
 #' @examples
 #' TSI_rawMPD = predict_TSI("Gagp17Matrix", "rawMPD", 0.003)
-#' TSI_WFPS = predict_TSI("Gagp17Matrix", "WFPS", 0.003)
 #'
 #' @export
 predict_TSI <- function(hiv_region, distance_metric, x_new){
