@@ -19,7 +19,7 @@ Currently supported measures of proviral diversity include:
 - weighted fraction of polymorphic sites (WFPS). Available but not recommended for viremic time prediction.
 - WFPS at third codon positions only (WFPS_codons). 
 
-Note: *WFPS and WFPS_codons are available but not recommended for viremic time prediction*.
+Note: *WFPS and WFPS_codons are available but not recommended for viremic time prediction. They are included here for comparison, if needed.*
 In these cases, variants and errorthreshold must be specified. 
  For example:
 - variants = c("A","C","G","T","-"), 
