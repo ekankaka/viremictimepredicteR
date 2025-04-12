@@ -19,10 +19,7 @@ Currently supported diversity metrics include:
 - weighted fraction of polymorphic sites (WFPS).
 - WFPS at third codon positions only (WFPScodons).
 
-*For WFPS and WFPScodons, sequencing errorthresholds are required to calculate these metrics. 
- For example:
-- errorthreshold = 0 (for prominent outgrowth viruses )
-- errorthreshold = 0.01 (for usual NGS e.g proviral DNA sequences that are not outgrowth)*
+*For WFPS and WFPScodons, sequencing errorthresholds are required to calculate these metrics. For example, errorthreshold = 0 for prominent outgrowth viruses, and 0.01 for proviral DNA sequences.*
 
 Currently supported options for weights include:
 - None: individuals contributed equally to fitting the model (weight = 1), new data points also have weight = 1 in prediction
