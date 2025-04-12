@@ -79,7 +79,8 @@ dist <- calculate_distance(dnaset = notgappy, sequence_type = "outgrowth")
 # predict viremic time
 viremic_time <- predict_viremic_time(distances = dist, hiv_region = "gp41")
 
-head(viremic_time)
+# View the predicted results
+View(viremic_time)
 
 ```
 
