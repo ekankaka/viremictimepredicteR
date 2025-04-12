@@ -4,7 +4,7 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of viremictimepredicteR is to predict viremic times (time since infection, or TSI) using unique sequence diversity for a specified region of aligned HIV proviral or outgrowth sequences, and use this diversity to predict time since infection. Predictions are based on markov chain monte carlo samples from Bayesian models fitted by the authors, for these regions and diversity metrics, with or without weights.
+The goal of viremictimepredicteR is to predict viremic times (time since infection, or TSI) using unique sequence diversity for a specified region of aligned HIV proviral or outgrowth sequences. Predictions are based on markov chain monte carlo samples from Bayesian models fitted by the authors, for these regions and diversity metrics, with or without weights.
 
 The currently supported hiv regions include:
 - Matrix (Matrix region of gag, especially p17)
