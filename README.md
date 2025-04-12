@@ -4,26 +4,38 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of viremictimepredicteR is to calculate diversity for a specified region of aligned HIV proviral sequences or outgrowth virus sequences, and use this diversity to predict time since infection. Predictions are based on markov chain monte carlo samples from Bayesian models fitted by the authors, for these regions and distance metrics. Predictions include a median estimate and a 95% credible interval, based on intercepts and slopes from the posterior distribution of a simple linear regression model, with or without weights.
+The goal of viremictimepredicteR is to predict viremic times (time since infection, or TSI) using unique sequence diversity for a specified region of aligned HIV proviral or outgrowth sequences, and use this diversity to predict time since infection. Predictions are based on markov chain monte carlo samples from Bayesian models fitted by the authors, for these regions and diversity metrics, with or without weights.
 
-The currently supported hiv regions (selected due to better performance) include:
+The currently supported hiv regions include:
 - Matrix (Matrix region of gag, especially p17)
 - RT (reverse transcriptase region of Pol)
 - gp41 (gp41 region of env)
 
-Currently supported measures of proviral diversity include:
+Currently supported diversity metrics include:
 - mean pairwise distance from the "raw" model (rawMPD)
 - mean pairwise distance from the "TN93" model (tn93MPD)
 - nucleotide diversity from the "raw" model (rawPI)
 - nucleotide diversity from the "TN93" model (tn93PI)
 - weighted fraction of polymorphic sites (WFPS).
-- WFPS at third codon positions only (WFPScodons). Available but not recommended for viremic time prediction.
+- WFPS at third codon positions only (WFPScodons).
 
-Note: *For WFPS and WFPScodons, sequencing errorthresholds are required to calculate these metrics. 
+*For WFPS and WFPScodons, sequencing errorthresholds are required to calculate these metrics. 
  For example:
 - errorthreshold = 0 (for prominent outgrowth viruses )
-- errorthreshold = 0.01 (for usual NGS e.g proviral DNA sequences that are not outgrowth)
+- errorthreshold = 0.01 (for usual NGS e.g proviral DNA sequences that are not outgrowth)*
 
+Currently supported options for weights include:
+- None: individuals contributed equally to fitting the model (weight = 1), new data points also have weight = 1 in prediction
+- uniqueseqsAsis: individuals with more unique sequences contributed more, with weights based on raw sequence counts
+- uniqueseqsLogTransformed:  individuals with more unique sequences contributed more, with weights based on log-transformed sequence counts
+
+Results:
+With default settings, output contains results for all diversity measures and all weighting options. Predictions include a median estimate and a 95% credible interval. However:
+- For weighting options, we recommend *uniqueseqsLogTransformed*. 
+- For diversity metrics, you may use any except *WFPScodons* which may give estimates that differ significantly from other metrics.
+
+
+Note: *For WFPS and WFPScodons, sequencing errorthresholds are required to calculate these metrics. 
 ## Installation
 
 You can install the development version of viremictimepredicteR from [GitHub](https://github.com/) with: 
