@@ -31,8 +31,6 @@ With default settings, output contains results for all diversity measures and al
 - For weighting options, we recommend *uniqueseqsLogTransformed*. 
 - For diversity metrics, you may use any except *WFPScodons* which may give estimates that differ significantly from other metrics.
 
-
-Note: *For WFPS and WFPScodons, sequencing errorthresholds are required to calculate these metrics. 
 ## Installation
 
 You can install the development version of viremictimepredicteR from [GitHub](https://github.com/) with: 
