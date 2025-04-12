@@ -1,79 +1,77 @@
 
-library(ape)
-library(phangorn)
-library(pegas)
-library(Biostrings)
-library(strex) # for str_elem
-library(rjags)
-
-
 #' Function to calculate pairwise distances from DNA sequences
 #'
-#' This function takes a DNAbin object,
-#' checks eligibility using the "check_eligibility" function,
-#' (if eligible), calculates the distance using the specified evolutionary model.
-#' Currently supported distance metrics include:
+#' @param dnaset. DNAStringSet object
+#' 
+#' @param sequence_type. outgrowth or provirus (case-insensitive)
+#' Used to determine error thresholds when calculating diversity metrics WFPS and WFPScodons
+#' 
+#' @param min_eligible_count. Minimum number of eligible sequences to accept
+#' 
+#' @return Returns a list of input parameters and result of different diversity metrics.
+#' Currently supported diversity metrics include:
 #' - mean pairwise distance from the "raw" model (rawMPD)
 #' - mean pairwise distance from the "TN93" model (tn93MPD)
 #' - nucleotide diversity from the "raw" model (rawPI)
 #' - nucleotide diversity from the "TN93" model (tn93PI)
 #' - weighted fraction of polymorphic sites (WFPS)
-#' - WFPS at third codon positions only (WFPS_codons)
-#'
-#' @param dna_bin. DNAbin object
-#' @param distance_metric. specified distance metric
-#' @param min_sequence_count. Minimum sequence count, used by "check_eligibility function".
-#' @param min_seq_width. Minimum sequence alignment width, used by "check_eligibility function".
-#' @param error_threshold. Sequencing error threshold. used by "diversity_at_each_position" function
-#' and must be specified for WFPS or WFPS_codons
-#' @param variants. Expected characters in DNAbin object. used by "diversity_at_each_position" function
-#' and must be specified for WFPS or WFPS_codons
-#'
-#' @return distance as a numeric value.
+#' - WFPS at third codon positions only (WFPScodons)
 #' @examples
-#' dist_rawMPD <- calculate_distance(dna_bin, "rawMPD", 2, 9)
+#' dist <- calculate_distance(dnaset = mydnaset, sequence_type = "outgrowth")
 #'
 #' @export
-calculate_distance <- function(dna_bin, distance_metric,
-                               min_sequence_count, min_seq_width,
-                               errorthreshold = 0,
-                               variants = c("A","C","G","T","-")){
-  # check eligibility
-  eligible = check_eligibility(dna_bin, min_sequence_count, min_seq_width)
+calculate_distance <- function(dnaset, sequence_type, min_eligible_count = 2){
+  
+  if (!inherits(dnaset, "DNAStringSet")) stop("Input must be a DNAStringSet")
+  
+  pass2 = count_eligible_sequences(dnaset, min_eligible_count)
+  if (pass2 == FALSE) stop("Remaining sequence count is less than the required minimum.")
+  
+  # count of unique eligible sequences
+  uniqueseqs = length(dnaset)
+  
+  # alignment width of unique eligible sequences
+  width = unique(width(dnaset))
+  
+  # convert to dnabin, on DNAbin
+  dnabin = dnaStringSet_to_dnabin(dnaset)
+  
+  # Calculate raw mean pairwise distance, on DNAbin
+  raw_distances <- dist.dna(dnabin, model = "raw")
+  rawMPD <- mean(raw_distances)
+  
+  # Calculate TN93 mean pairwise distance, on DNAbin
+  tn93_distances <- dist.dna(dnabin, model = "TN93")
+  tn93MPD <- mean(tn93_distances)
+  
+  # Calculate nucleotide diversity (pi) from raw p-distances, on DNAbin
+  rawPI <- nuc.div(dnabin, model = "raw")
+  
+  # Calculate nucleotide diversity (pi) from TN93 distances, on DNAbin
+  tn93PI <- nuc.div(dnabin, model = "TN93")
+  
+  #calculate weighted fraction of polymorphic sites (WFPS), on DNAStringSet
+  threshold <-  case_when(
+    grepl("outgrowth", tolower(sequence_type)) ~ 0,
+    grepl("provirus", tolower(sequence_type)) ~ 0.01,
+    TRUE ~ NA  )
+  
+  d = diversity_at_each_position(dnaset = dnaset,
+                                 errorthreshold = threshold,
+                                 valid_nucleotides = c("A", "C", "G", "T","-") )
+  d = unlist(d)
+  WFPS = mean(d)
+  
+  # calculate WFPS at 3rd codon positions
+  d3 <- d[seq(3,length(d),3)]
+  WFPScodons = mean(d3)
+  
+  # return result
+  result = list(sequence_type = sequence_type, 
+                      uniqueseqs = uniqueseqs, alignmentwidth = width, 
+                      rawMPD = rawMPD, tn93MPD = tn93MPD, rawPI = rawPI,
+                      tn93PI = tn93PI, WFPS = WFPS, WFPScodons = WFPScodons)
+  
+  return(result)
 
-  if (eligibile){
-
-    if (distance_metric == "rawMPD"){dist <- mean(dist.dna(dna_bin, model = "raw"))}
-
-    if (distance_metric == "tn93MPD"){dist <- mean(dist.dna(dna_bin, model = "TN93"))}
-
-    if (distance_metric == "rawPI"){dist <- nuc.div(dna_bin, model = "raw")}
-
-    if (distance_metric == "tn93PI"){dist <- nuc.div(dna_bin, model = "TN93")}
-
-    if (distance_metric == "WFPS"){
-      div_list <- diversity_at_each_position(dna_bin, errorthreshold,variants)
-      div <- unlist(div_list)
-      dist <- mean(div)
-    }
-
-    if (distance_metric == "WFPS_codons"){
-      div_list <- diversity_at_each_position(dna_bin, errorthreshold,variants)
-      div <- unlist(div_list)
-      # trim to first and last non-gappy codons
-      indices = locate_overall_non_gap_codons(dna_bin)
-      first = indices[1]
-      last = indices[2]
-      # diversity at third codon positions
-      if (!all(is.na(div))){
-        div3 <- div[seq(3,length(div),3)]
-        div3_trimmed = div3[first:last]
-        dist = mean(div3_trimmed)
-      } else {print("Diversity at all codon positions is NA")}
-
-    }
-
-    print(dist)
-    return(dist)
-  }
 }

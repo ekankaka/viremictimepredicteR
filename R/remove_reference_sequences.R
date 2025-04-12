@@ -1,31 +1,28 @@
 
-library(ape)
-library(phangorn)
-library(pegas)
-library(Biostrings)
-library(strex) # for str_elem
-library(rjags)
-
-#' Function to remove reference sequences, if any
+#' Function to remove reference sequences 
+#' with specified reference identifiers in the sequence headers, if any
+#' 
+#' @param dnaset. DNAStringSet object
 #'
-#' This function checks for sequences with the pattern "Ref" or "HXB2"
-#' in the sequence header, and removes these sequences
+#' @param ref_identifiers. Vector of pattern(s) in headers that identify reference sequences
 #'
-#' @param fasta_file. Character. Fasta file path
+#' @return Returns DNAStringSet object
 #'
-#' @return Returns filtered sequences as DNAbin object
 #' @examples
-#' dna_bin_filtered <- remove_reference_sequences("data/example_GAG_P17.fasta")
+#' noRefs = remove_reference_sequences(dnaset)
 #'
 #' @export
-remove_reference_sequences <- function(fasta_file_path) {
-  # Read in the fasta file
-  sequences <- read.dna(fasta_file_path, format = "fasta")
-
-  # Filter out sequences with "Ref" or "HXB2" in the headers
-  headers <- rownames(sequences)
-  filtered_indices <- !grepl("Ref|HXB2", headers, ignore.case = TRUE)
-  filtered_sequences <- sequences[filtered_indices, ]
-
-  return(filtered_sequences)
+remove_reference_sequences <- function(dnaset, ref_identifiers = c("Ref", "HXB2")){
+  
+  # assert that DNAstringset exists
+  if (!inherits(dnaset, "DNAStringSet")) stop("Input must be a DNAStringSet")
+  
+  # paste together the patterns to search for in sequence headers
+  patterns = paste(ref_identifiers, collapse = "|")
+  
+  # keep only sequences that do not have these patterns in their headers
+  noRefs = dnaset[!grepl(patterns, names(dnaset))]
+  
+  return(noRefs)
+  
 }
