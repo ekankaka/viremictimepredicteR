@@ -65,7 +65,7 @@ noRefs = remove_reference_sequences(dnaset = dnaset)
 trimmed = trim_terminal_gappy_codons(dnaset = noRefs)
 
 # Ensure trimmed alignment width is at least the required minimum (returns TRUE or FALSE)
-pass1 = check_alignment_width(dnaset = trimmed)
+pass1 = check_alignment_width(dnaset = trimmed, min_alignment_width = 9)
 
 # Remove sequences with non-nucleotide characters in trimmed alignment, beyond a specified threshold
 notgappy = filter_sequences_by_non_nucleotides(dnaset = trimmed, non_nucleotide_threshold = 0.25)
@@ -78,6 +78,8 @@ dist <- calculate_distance(dnaset = notgappy, sequence_type = "outgrowth")
 
 # predict viremic time
 viremic_time <- predict_viremic_time(distances = dist, hiv_region = "gp41")
+
+head(viremic_time)
 
 ```
 
