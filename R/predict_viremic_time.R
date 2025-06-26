@@ -98,52 +98,39 @@ predict_y <- function(mcmc_samples, x_new, weight_new){
 #' @export
 predict_viremic_time <- function(
     distances,
-    hiv_region,
-    weights_type = c("None", "UniqueseqsAsis", "UniqueseqsLogTransformed"),
-    diversity_metrics = c("rawMPD", "tn93MPD", "rawPI", "tn93PI", "WFPS", "WFPScodons")){
+    sequence_type,
+    hiv_region = c("Matrix", "RT", "gp41", "gp41_and_RT_Mean"),
+    weights_type = "None",
+    diversity_metrics = c("rawMPD", "tn93MPD", "rawPI", "tn93PI")){
   
-  # sequence type
-  sequence_type = distances$sequence_type
+  # assert correct entries
+  stopifnot(sequence_type %in% c("outgrowth", "proviruses"))
+  stopifnot(hiv_region %in% c("gp41", "RT", "gp41_and_RT_Mean", "Matrix"))
+  stopifnot(weights_type == "None")
+  stopifnot(diversity_metrics %in% c("rawMPD", "tn93MPD", "rawPI", "tn93PI", 
+                                     "WFPS", "WFPScodons"))
   
-  # unique sequences
-  uniqueseqs = distances$uniqueseqs
-  
-  # alignment width
-  alignmentwidth = distances$alignmentwidth
-  
-  # check if hiv region is eligible for prediction
-  hiv_region_formatted <- case_when(
-    grepl("matrix", tolower(hiv_region)) ~ "Matrix",
-    grepl("p17", tolower(hiv_region)) ~ "Matrix",
-    grepl("rt", tolower(hiv_region)) ~ "RT",
-    grepl("gp41", tolower(hiv_region)) ~ "gp41",
-    TRUE ~ NA)
-  
-  eligible_regions = c("Matrix", "RT", "gp41")
-  if (!(tolower(hiv_region_formatted) %in% tolower(eligible_regions))) stop("hiv_region must be one of: Matrix, RT, or gp41")
+  # make sure distances are correct if using gp41_and_RT mean
+  if (hiv_region == "gp41_and_RT"){
+    print("Warning: Please ensure that you are using mean diversity for gp41 and RT.")
+  }
   
   # read mcmc samples
-  samples = readRDS("data/samples.rds")
-  
+  samples = readRDS("data/samples_linearRegressionOnly.rds")
 
-  
   # select weights to use for prediction
-  predictions = data.frame(sequence_type = NA, hiv_region = NA, uniqueseqs = NA,
-                           alignmentwidth = NA, weights_type = NA, 
+  predictions = data.frame(sequence_type = NA, hiv_region = NA, weights_type = NA, 
                            diversity_metric = NA, median = NA, lwr = NA, upr = NA)
   
   for (i in 1:length(weights_type)){
     for (j in 1:length(diversity_metrics)){
-      print("########################################")
       
       # prediction model to use for prediction
       model_name = paste(sequence_type, 
-                         hiv_region_formatted, 
+                         hiv_region, 
                          weights_type[i],
                          diversity_metrics[j], 
                          sep = "_")
-      
-      print(model_name)
       
       # mcmc samples for this model
       mod_sim = samples[[model_name]]
@@ -153,26 +140,24 @@ predict_viremic_time <- function(
       x_new = distances[[diversity_metrics[j]]]
       
       # weight to use in prediction
-      weight = case_when(
-        weights_type == "None" ~ 1,
-        weights_type == "UniqueseqsAsis" ~ uniqueseqs,
-        weights_type == "UniqueseqsLogTransformed" ~ log(uniqueseqs),
-        TRUE ~ NA)
+      weight = 1 # all data points carry equal weight
       
       # predict
       res <- predict_y(mcmc_samples = mod_csim, x_new = x_new, weight_new = weight)
-      out <- c(sequence_type = sequence_type, hiv_region = hiv_region_formatted, 
-               uniqueseqs = uniqueseqs, alignmentwidth = alignmentwidth,
+      out <- c(sequence_type = sequence_type, hiv_region = hiv_region,
                weights_type = weights_type[i], 
                diversity_metric = diversity_metrics[j], res)
       
-      predictions <- data.frame(rbind(predictions, out)) %>% filter(!is.na(hiv_region))
-      print(predictions[nrow(predictions),])
+      predictions <- data.frame(rbind(predictions, out)) %>% 
+        # keep predictions for weight == "None" & diversity 
+        filter(!is.na(hiv_region) & weights_type == "None") %>%
+        # keep predictions for good diversity metrics
+        filter(diversity_metric %in% c("rawMPD", "tn93MPD", "rawPI", "tn93PI"))
       
       }
       
   }
-  
+  print(predictions)
   return(predictions)
   
   }

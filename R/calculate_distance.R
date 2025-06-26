@@ -17,21 +17,15 @@
 #' - weighted fraction of polymorphic sites (WFPS)
 #' - WFPS at third codon positions only (WFPScodons)
 #' @examples
-#' dist <- calculate_distance(dnaset = mydnaset, sequence_type = "outgrowth")
+#' dist <- calculate_distance(dnaset = mydnaset, min_eligible_count = 2)
 #'
 #' @export
-calculate_distance <- function(dnaset, sequence_type, min_eligible_count = 2){
+calculate_distance <- function(dnaset, min_eligible_count = 2){
   
   if (!inherits(dnaset, "DNAStringSet")) stop("Input must be a DNAStringSet")
   
   pass2 = count_eligible_sequences(dnaset, min_eligible_count)
   if (pass2 == FALSE) stop("Remaining sequence count is less than the required minimum.")
-  
-  # count of unique eligible sequences
-  uniqueseqs = length(dnaset)
-  
-  # alignment width of unique eligible sequences
-  width = unique(width(dnaset))
   
   # convert to dnabin, on DNAbin
   dnabin = dnaStringSet_to_dnabin(dnaset)
@@ -50,27 +44,8 @@ calculate_distance <- function(dnaset, sequence_type, min_eligible_count = 2){
   # Calculate nucleotide diversity (pi) from TN93 distances, on DNAbin
   tn93PI <- nuc.div(dnabin, model = "TN93")
   
-  #calculate weighted fraction of polymorphic sites (WFPS), on DNAStringSet
-  threshold <-  case_when(
-    grepl("outgrowth", tolower(sequence_type)) ~ 0,
-    grepl("provirus", tolower(sequence_type)) ~ 0.01,
-    TRUE ~ NA  )
-  
-  d = diversity_at_each_position(dnaset = dnaset,
-                                 errorthreshold = threshold,
-                                 valid_nucleotides = c("A", "C", "G", "T","-") )
-  d = unlist(d)
-  WFPS = mean(d)
-  
-  # calculate WFPS at 3rd codon positions
-  d3 <- d[seq(3,length(d),3)]
-  WFPScodons = mean(d3)
-  
   # return result
-  result = list(sequence_type = sequence_type, 
-                      uniqueseqs = uniqueseqs, alignmentwidth = width, 
-                      rawMPD = rawMPD, tn93MPD = tn93MPD, rawPI = rawPI,
-                      tn93PI = tn93PI, WFPS = WFPS, WFPScodons = WFPScodons)
+  result = c(rawMPD = rawMPD, tn93MPD = tn93MPD, rawPI = rawPI, tn93PI = tn93PI)
   
   return(result)
 

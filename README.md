@@ -4,32 +4,25 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of viremictimepredicteR is to predict viremic times (time since infection, or TSI) using unique sequence diversity for a specified region of aligned HIV proviral or outgrowth sequences. Predictions are based on markov chain monte carlo samples from Bayesian models fitted by the authors, for these regions and diversity metrics, with or without weights.
+The goal of viremictimepredicteR is to predict viremic time using unique sequence diversity for a specified region of aligned HIV proviral or outgrowth sequences. Predictions are based on markov chain monte carlo samples from Bayesian models fitted by the authors, for these regions and diversity metrics.
 
-The currently supported hiv regions include:
+HIV regions: The currently recommended regions to use include:
+- gp41 (predict using diversity for the gp41 region of env)
+- RT (predict using diversity for the reverse transcriptase region of Pol)
+- `gp41_and_RT_Mean` (predict using mean diversity for the gp41 and RT regions)
 - Matrix (Matrix region of gag, especially p17)
-- RT (reverse transcriptase region of Pol)
-- gp41 (gp41 region of env)
 
-Currently supported diversity metrics include:
+Diversity metrics: The currently recommended metrics include:
 - mean pairwise distance from the "raw" model (rawMPD)
 - mean pairwise distance from the "TN93" model (tn93MPD)
 - nucleotide diversity from the "raw" model (rawPI)
 - nucleotide diversity from the "TN93" model (tn93PI)
-- weighted fraction of polymorphic sites (WFPS).
-- WFPS at third codon positions only (WFPScodons).
 
-*For WFPS and WFPScodons, sequencing errorthresholds are required to calculate these metrics. For example, errorthreshold = 0 for prominent outgrowth viruses, and 0.01 for proviral DNA sequences.*
-
-Currently supported options for weights include:
-- None: individuals contributed equally to fitting the model (weight = 1), new data points also have weight = 1 in prediction
-- uniqueseqsAsis: individuals with more unique sequences contributed more, with weights based on raw sequence counts
-- uniqueseqsLogTransformed:  individuals with more unique sequences contributed more, with weights based on log-transformed sequence counts
+Weights: The currently recommended options include:
+- None: Model with no weights (all data points carry the same weight = 1)
 
 Results:
-With default settings, output contains results for all diversity measures and all weighting options. Predictions include a median estimate and a 95% credible interval. However:
-- For weighting options, we recommend *uniqueseqsLogTransformed*. 
-- For diversity metrics, you may use any except *WFPScodons* which may give estimates that differ significantly from other metrics.
+With default settings, output contains results for all recommeded diversity measures, based on Bayesian simple unweighted linear regression. Predictions include a median estimate and a 95% credible interval. However:
 
 ## Installation
 
@@ -41,7 +34,7 @@ devtools::install_github("ekankaka/viremictimepredicteR")
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+This is a basic example which shows you how to predict viremic time using diversity in gp41 and RT combined:
 
 ``` r
 ## load package
@@ -56,31 +49,39 @@ library(viremictimepredicteR)
 ## - be codon-alined and cut to a specific hiv region (One great tool is Gene cutter from los alamos) 
 
 # read fasta
-dnaset = readDNAStringSet("data/example_gp41_outgrowth.fasta")
+dnaset_gp41 = readDNAStringSet("data/example_gp41_outgrowth.fasta")
+dnaset_RT = readDNAStringSet("data/example_RT_outgrowth.fasta")
 
 # remove reference sequences
-noRefs = remove_reference_sequences(dnaset = dnaset)
+noRefs_gp41 = remove_reference_sequences(dnaset = dnaset_gp41)
+noRefs_RT = remove_reference_sequences(dnaset = dnaset_RT)
 
 # Trim leading and trailing gappy codons, where all sequences in alignment have gappy codons
-trimmed = trim_terminal_gappy_codons(dnaset = noRefs)
+trimmed_gp41 = trim_terminal_gappy_codons(dnaset = noRefs_gp41)
+trimmed_RT = trim_terminal_gappy_codons(dnaset = noRefs_RT)
 
 # Ensure trimmed alignment width is at least the required minimum (returns TRUE or FALSE)
-pass1 = check_alignment_width(dnaset = trimmed, min_alignment_width = 9)
+pass1_gp41 = check_alignment_width(dnaset = trimmed_gp41, min_alignment_width = 9)
+pass1_RT = check_alignment_width(dnaset = trimmed_RT, min_alignment_width = 9)
 
 # Remove sequences with non-nucleotide characters in trimmed alignment, beyond a specified threshold
-notgappy = filter_sequences_by_non_nucleotides(dnaset = trimmed, non_nucleotide_threshold = 0.25)
+notgappy_gp41 = filter_sequences_by_non_nucleotides(dnaset = trimmed_gp41, non_nucleotide_threshold = 0.25)
+notgappy_RT = filter_sequences_by_non_nucleotides(dnaset = trimmed_RT, non_nucleotide_threshold = 0.25)
 
 # Ensure remaining sequence count is at least the required minimum (returns TRUE or FALSE)
-pass2 = count_eligible_sequences(dnaset = notgappy, min_eligible_count = 2)
+pass2_gp41 = count_eligible_sequences(dnaset = notgappy_gp41, min_eligible_count = 2)
+pass2_RT = count_eligible_sequences(dnaset = notgappy_RT, min_eligible_count = 2)
 
 # calculate distance
-dist <- calculate_distance(dnaset = notgappy, sequence_type = "outgrowth")
+dist_gp41 <- calculate_distance(dnaset = notgappy_gp41)
+dist_RT <- calculate_distance(dnaset = notgappy_RT)
+dist_gp41_and_RT_Mean <- (dist_gp41 + dist_RT) / 2
 
 # predict viremic time
-viremic_time <- predict_viremic_time(distances = dist, hiv_region = "gp41")
+viremic_time_gp41_and_RT_Mean <- predict_viremic_time(distances = dist_gp41_and_RT_Mean, sequence_type = "outgrowth", hiv_region = "gp41_and_RT_Mean")
 
 # View the predicted results
-View(viremic_time)
+View(viremic_time_gp41_and_RT_Mean)
 
 ```
 
