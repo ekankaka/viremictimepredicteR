@@ -21,9 +21,6 @@ Diversity metrics: The currently recommended metrics include:
 Weights: The currently recommended options include:
 - `None`: Model with no weights (all data points carry the same weight = 1)
 
-Results:
-With default settings, output contains results for all recommeded diversity measures, based on Bayesian simple unweighted linear regression. Predictions include a median estimate and a 95% credible interval. However:
-
 ## Installation
 
 You can install the development version of viremictimepredicteR from [GitHub](https://github.com/) with: 
@@ -74,11 +71,11 @@ dist_gp41 <- calculate_distance(dnaset = notgappy_gp41)
 dist_RT <- calculate_distance(dnaset = notgappy_RT)
 dist_Mean <- (dist_gp41 + dist_RT) / 2
 
-# predict viremic time
+# predict viremic time using Bayesian simple linear regression, with no weights
 viremic_time <- predict_viremic_time(distances = dist_Mean, sequence_type = "outgrowth",  
 hiv_region = "gp41_and_RT_Mean")
 
-# View the predicted results
+# Results (predictions for the four recommended diversity metrics, with credible intervals)
 View(viremic_time)
 
 ```
