@@ -7,19 +7,19 @@
 The goal of viremictimepredicteR is to predict viremic time using unique sequence diversity for a specified region of aligned HIV proviral or outgrowth sequences. Predictions are based on markov chain monte carlo samples from Bayesian models fitted by the authors, for these regions and diversity metrics.
 
 HIV regions: The currently recommended regions to use include:
-- gp41 (predict using diversity for the gp41 region of env)
-- RT (predict using diversity for the reverse transcriptase region of Pol)
+- `gp41` (predict using diversity for the gp41 region of env)
+- `RT` (predict using diversity for the reverse transcriptase region of Pol)
 - `gp41_and_RT_Mean` (predict using mean diversity for the gp41 and RT regions)
-- Matrix (Matrix region of gag, especially p17)
+- `Matrix` (Matrix region of gag, especially p17)
 
 Diversity metrics: The currently recommended metrics include:
-- mean pairwise distance from the "raw" model (rawMPD)
-- mean pairwise distance from the "TN93" model (tn93MPD)
-- nucleotide diversity from the "raw" model (rawPI)
-- nucleotide diversity from the "TN93" model (tn93PI)
+- mean pairwise distance from the "raw" model (`rawMPD`)
+- mean pairwise distance from the "TN93" model (`tn93MPD`)
+- nucleotide diversity from the "raw" model (`rawPI`)
+- nucleotide diversity from the "TN93" model (`tn93PI`)
 
 Weights: The currently recommended options include:
-- None: Model with no weights (all data points carry the same weight = 1)
+- `None`: Model with no weights (all data points carry the same weight = 1)
 
 Results:
 With default settings, output contains results for all recommeded diversity measures, based on Bayesian simple unweighted linear regression. Predictions include a median estimate and a 95% credible interval. However:
@@ -34,21 +34,17 @@ devtools::install_github("ekankaka/viremictimepredicteR")
 
 ## Example
 
-This is a basic example which shows you how to predict viremic time using diversity in gp41 and RT combined:
+This is a basic example of how to predict viremic time using diversity in gp41 and RT combined:
 
 ``` r
 ## load package
 library(viremictimepredicteR)
 
-## specify the input fasta file
-## preferably, sequences in this input fasta file should:
-## - NOT contain dual (or multiple) infections
-## - be filtered for APOBEC-induced G to A hypermutation
-## - contain unique sequences only (no identical sequences)
-## - contain a minimum of two eligible sequences as per the above criteria.
-## - be codon-alined and cut to a specific hiv region (One great tool is Gene cutter from los alamos) 
-
-# read fasta
+## input fasta file. For best results, ensure:
+## - No dual (or multiple) infections
+## - No hypermutation
+## - 2 or more unique sequences
+## - Codon-aligned sequences, cut to a specific hiv region (e.g., using Gene cutter from Los Alamos) 
 dnaset_gp41 = readDNAStringSet("data/example_gp41_outgrowth.fasta")
 dnaset_RT = readDNAStringSet("data/example_RT_outgrowth.fasta")
 
@@ -78,7 +74,8 @@ dist_RT <- calculate_distance(dnaset = notgappy_RT)
 dist_gp41_and_RT_Mean <- (dist_gp41 + dist_RT) / 2
 
 # predict viremic time
-viremic_time_gp41_and_RT_Mean <- predict_viremic_time(distances = dist_gp41_and_RT_Mean, sequence_type = "outgrowth", hiv_region = "gp41_and_RT_Mean")
+viremic_time_gp41_and_RT_Mean <- predict_viremic_time(distances = dist_gp41_and_RT_Mean,  
+sequence_type = "outgrowth", hiv_region = "gp41_and_RT_Mean")
 
 # View the predicted results
 View(viremic_time_gp41_and_RT_Mean)
