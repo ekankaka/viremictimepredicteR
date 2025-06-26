@@ -44,7 +44,8 @@ library(viremictimepredicteR)
 ## - No dual (or multiple) infections
 ## - No hypermutation
 ## - 2 or more unique sequences
-## - Codon-aligned sequences, cut to a specific hiv region (e.g., using Gene cutter from Los Alamos) 
+## - Codon-aligned sequences, cut to a specific hiv region 
+## (e.g., using Gene cutter from Los Alamos) 
 dnaset_gp41 = readDNAStringSet("data/example_gp41_outgrowth.fasta")
 dnaset_RT = readDNAStringSet("data/example_RT_outgrowth.fasta")
 
@@ -61,8 +62,8 @@ pass1_gp41 = check_alignment_width(dnaset = trimmed_gp41, min_alignment_width = 
 pass1_RT = check_alignment_width(dnaset = trimmed_RT, min_alignment_width = 9)
 
 # Remove sequences with non-nucleotide characters in trimmed alignment, beyond a specified threshold
-notgappy_gp41 = filter_sequences_by_non_nucleotides(dnaset = trimmed_gp41, non_nucleotide_threshold = 0.25)
-notgappy_RT = filter_sequences_by_non_nucleotides(dnaset = trimmed_RT, non_nucleotide_threshold = 0.25)
+notgappy_gp41 = filter_non_nucleotides(dnaset = trimmed_gp41, threshold = 0.25)
+notgappy_RT = filter_nucleotides(dnaset = trimmed_RT, threshold = 0.25)
 
 # Ensure remaining sequence count is at least the required minimum (returns TRUE or FALSE)
 pass2_gp41 = count_eligible_sequences(dnaset = notgappy_gp41, min_eligible_count = 2)
@@ -74,8 +75,8 @@ dist_RT <- calculate_distance(dnaset = notgappy_RT)
 dist_Mean <- (dist_gp41 + dist_RT) / 2
 
 # predict viremic time
-viremic_time <- predict_viremic_time(distances = dist_Mean,  
-sequence_type = "outgrowth", hiv_region = "gp41_and_RT_Mean")
+viremic_time <- predict_viremic_time(distances = dist_Mean, sequence_type = "outgrowth",  
+hiv_region = "gp41_and_RT_Mean")
 
 # View the predicted results
 View(viremic_time)

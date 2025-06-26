@@ -8,7 +8,7 @@
 #'
 #' @param valid_nucleotides. Acceptable nucleotide characters (upper or lower case)
 #'
-#' @param non_nucleotide_threshold. Max acceptable proportion of non-nucleotide characters in alignment
+#' @param threshold. Max acceptable proportion of non-nucleotide characters in alignment
 #'
 #' @return Returns DNAStringSet object, filtered
 #'
@@ -16,10 +16,10 @@
 #' notgappy = filter_sequences_by_non_nucleotides(dnaset = trimmed, threshold = 0.25)
 #'
 #' @export
-filter_sequences_by_non_nucleotides <- function(dnaset,
-                                                valid_nucleotides = c("A", "C", "G", "T"),
-                                                min_alignment_width = 9,
-                                                non_nucleotide_threshold = 0.25) {
+filter_non_nucleotides <- function(dnaset,
+                                   valid_nucleotides = c("A", "C", "G", "T"),
+                                   min_alignment_width = 9,
+                                   threshold = 0.25) {
   # assert that DNAstringset exists
   if (!inherits(dnaset, "DNAStringSet")) stop("Input must be a DNAStringSet")
   
@@ -38,7 +38,7 @@ filter_sequences_by_non_nucleotides <- function(dnaset,
   
   # Apply filtering based on threshold
   filtered <- dnaset[
-    sapply(dnaset, function(seq) percent_non_nucleotides(seq, valid_nucleotides) < non_nucleotide_threshold)
+    sapply(dnaset, function(seq) percent_non_nucleotides(seq, valid_nucleotides) < threshold)
   ]
   
   return(filtered)
