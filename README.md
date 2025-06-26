@@ -71,11 +71,10 @@ pass2_RT = count_eligible_sequences(dnaset = notgappy_RT, min_eligible_count = 2
 # calculate distance
 dist_gp41 <- calculate_distance(dnaset = notgappy_gp41)
 dist_RT <- calculate_distance(dnaset = notgappy_RT)
-dist_gp41_and_RT_Mean <- (dist_gp41 + dist_RT) / 2
+dist_Mean <- (dist_gp41 + dist_RT) / 2
 
 # predict viremic time
-viremic_time_gp41_and_RT_Mean <- predict_viremic_time(distances = dist_gp41_and_RT_Mean,  
-sequence_type = "outgrowth", hiv_region = "gp41_and_RT_Mean")
+viremic_time <- predict_viremic_time(distances = dist_Mean,  sequence_type = "outgrowth", hiv_region = "gp41_and_RT_Mean")
 
 # View the predicted results
 View(viremic_time_gp41_and_RT_Mean)
