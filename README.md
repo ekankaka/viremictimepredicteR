@@ -36,8 +36,9 @@ This is a basic example of how to predict viremic time using diversity in gp41 a
 ``` r
 ## load package
 library(viremictimepredicteR)
-library(Biostrings)
-library(pegas)
+library(Biostrings) # for readDNAStringSet
+library(pegas) # for nuc.div and dist.dna in calculate_distances function
+ibrary(rjags) # for as.mcmc to load Bayesian posterior samples
 
 ## input fasta file. For best results, ensure:
 ## - No dual (or multiple) infections
