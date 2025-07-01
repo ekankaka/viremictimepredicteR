@@ -36,6 +36,8 @@ This is a basic example of how to predict viremic time using diversity in gp41 a
 ``` r
 ## load package
 library(viremictimepredicteR)
+library(Biostrings)
+library(pegas)
 
 ## input fasta file. For best results, ensure:
 ## - No dual (or multiple) infections
