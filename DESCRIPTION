@@ -9,3 +9,11 @@ License: MIT
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
+Imports:
+    ape,
+    Biostrings,
+    phanhorn,
+    pegas,
+    strex, # for str_elem
+    rjags,
+    tidyverse
