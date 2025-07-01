@@ -60,7 +60,7 @@ pass1_RT = check_alignment_width(dnaset = trimmed_RT, min_alignment_width = 9)
 
 # Remove sequences with non-nucleotide characters in trimmed alignment, beyond a specified threshold
 notgappy_gp41 = filter_non_nucleotides(dnaset = trimmed_gp41, threshold = 0.25)
-notgappy_RT = filter_nucleotides(dnaset = trimmed_RT, threshold = 0.25)
+notgappy_RT = filter_non_nucleotides(dnaset = trimmed_RT, threshold = 0.25)
 
 # Ensure remaining sequence count is at least the required minimum (returns TRUE or FALSE)
 pass2_gp41 = count_eligible_sequences(dnaset = notgappy_gp41, min_eligible_count = 2)
