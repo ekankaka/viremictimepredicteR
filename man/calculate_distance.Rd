@@ -4,49 +4,32 @@
 \alias{calculate_distance}
 \title{Function to calculate pairwise distances from DNA sequences}
 \usage{
-calculate_distance(
-  dna_bin,
-  distance_metric,
-  min_sequence_count,
-  min_seq_width,
-  errorthreshold = 0,
-  variants = c("A", "C", "G", "T", "-")
-)
+calculate_distance(dnaset, min_eligible_count = 2)
 }
 \arguments{
-\item{dna_bin.}{DNAbin object}
+\item{dnaset.}{DNAStringSet object}
 
-\item{distance_metric.}{specified distance metric}
+\item{sequence_type.}{outgrowth or provirus (case-insensitive)
+Used to determine error thresholds when calculating diversity metrics WFPS and WFPScodons}
 
-\item{min_sequence_count.}{Minimum sequence count, used by "check_eligibility function".}
-
-\item{min_seq_width.}{Minimum sequence alignment width, used by "check_eligibility function".}
-
-\item{error_threshold.}{Sequencing error threshold. used by "diversity_at_each_position" function
-and must be specified for WFPS or WFPS_codons}
-
-\item{variants.}{Expected characters in DNAbin object. used by "diversity_at_each_position" function
-and must be specified for WFPS or WFPS_codons}
+\item{min_eligible_count.}{Minimum number of eligible sequences to accept}
 }
 \value{
-distance as a numeric value.
-}
-\description{
-This function takes a DNAbin object,
-checks eligibility using the "check_eligibility" function,
-(if eligible), calculates the distance using the specified evolutionary model.
-Currently supported distance metrics include:
+Returns a list of input parameters and result of different diversity metrics.
+Currently supported diversity metrics include:
 \itemize{
 \item mean pairwise distance from the "raw" model (rawMPD)
 \item mean pairwise distance from the "TN93" model (tn93MPD)
 \item nucleotide diversity from the "raw" model (rawPI)
 \item nucleotide diversity from the "TN93" model (tn93PI)
 \item weighted fraction of polymorphic sites (WFPS)
-\item WFPS at third codon positions only (WFPS_codons)
+\item WFPS at third codon positions only (WFPScodons)
 }
+}
+\description{
+Function to calculate pairwise distances from DNA sequences
 }
 \examples{
-dist_rawMPD <- calculate_distance(dna_bin, "rawMPD", 2, 9)
-dist_WFPS <- calculate_distance(dna_bin, "WFPS", 2, 9, 0, c("A","C","G","T","-"))
+dist <- calculate_distance(dnaset = mydnaset, min_eligible_count = 2)
 
 }

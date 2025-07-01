@@ -2,21 +2,24 @@
 % Please edit documentation in R/remove_reference_sequences.R
 \name{remove_reference_sequences}
 \alias{remove_reference_sequences}
-\title{Function to remove reference sequences, if any}
+\title{Function to remove reference sequences
+with specified reference identifiers in the sequence headers, if any}
 \usage{
-remove_reference_sequences(fasta_file_path)
+remove_reference_sequences(dnaset, ref_identifiers = c("Ref", "HXB2"))
 }
 \arguments{
-\item{fasta_file.}{Character. Fasta file path}
+\item{dnaset.}{DNAStringSet object}
+
+\item{ref_identifiers.}{Vector of pattern(s) in headers that identify reference sequences}
 }
 \value{
-Returns filtered sequences as DNAbin object
+Returns DNAStringSet object
 }
 \description{
-This function checks for sequences with the pattern "Ref" or "HXB2"
-in the sequence header, and removes these sequences
+Function to remove reference sequences
+with specified reference identifiers in the sequence headers, if any
 }
 \examples{
-dna_bin_filtered <- remove_reference_sequences("data/example_GAG_P17.fasta")
+noRefs = remove_reference_sequences(dnaset)
 
 }
