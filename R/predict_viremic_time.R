@@ -116,7 +116,9 @@ predict_viremic_time <- function(
   }
   
   # read mcmc samples
-  samples <- readRDS(system.file("extdata", "samples_linearRegressionOnly.rds", package = "viremictimepredicteR"))
+  samples <- readRDS(system.file("extdata", 
+                                 "samples_linearRegressionOnly.rds", 
+                                 package = "viremictimepredicteR"))
   
 
   # select weights to use for prediction

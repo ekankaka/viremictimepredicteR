@@ -45,8 +45,6 @@ library(pegas)
 ## - 2 or more unique sequences
 ## - Codon-aligned sequences, cut to a specific hiv region 
 ## (e.g., using Gene cutter from Los Alamos) 
-library(Biostrings)
-
 gp41_path <- system.file("extdata", "example_gp41_outgrowth.fasta", package = "viremictimepredicteR")
 dnaset_gp41 <- readDNAStringSet(gp41_path)
 
