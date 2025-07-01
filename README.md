@@ -43,8 +43,13 @@ library(viremictimepredicteR)
 ## - 2 or more unique sequences
 ## - Codon-aligned sequences, cut to a specific hiv region 
 ## (e.g., using Gene cutter from Los Alamos) 
-dnaset_gp41 = readDNAStringSet("data/example_gp41_outgrowth.fasta")
-dnaset_RT = readDNAStringSet("data/example_RT_outgrowth.fasta")
+library(Biostrings)
+
+gp41_path <- system.file("extdata", "example_gp41_outgrowth.fasta", package = "viremictimepredicteR")
+dnaset_gp41 <- readDNAStringSet(gp41_path)
+
+RT_path <- system.file("extdata", "example_RT_outgrowth.fasta", package = "viremictimepredicteR")
+dnaset_RT <- readDNAStringSet(RT_path)
 
 # remove reference sequences
 noRefs_gp41 = remove_reference_sequences(dnaset = dnaset_gp41)
