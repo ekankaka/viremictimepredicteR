@@ -13,7 +13,6 @@ Imports:
     ape,
     Biostrings,
     pegas,
-    phanghorn,
     strex,
     rjags,
     tidyverse
