@@ -12,8 +12,8 @@ RoxygenNote: 7.3.2
 Imports:
     ape,
     Biostrings,
-    phanhorn,
     pegas,
-    strex, # for str_elem
+    phanghorn,
+    strex,
     rjags,
     tidyverse
