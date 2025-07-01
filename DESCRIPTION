@@ -1,10 +1,10 @@
 Package: viremictimepredicteR
 Title: CALCULATE PAIRWISE DISTANCES IN HIV PROVIRAL DNA SEQUENCES OR OUTGROWTH VIRUS SEQUENCES, AND USE THESE DISTANCES TO PREDICT VIREMIC TIME.
-Version: 1.1.0 (April 13, 2025)
+Version: 0.1.0
 Authors@R: 
     person("Edward", "Kankaka", , "ken1edd@gmail.com", role = c("aut", "cre"),
            comment = c(ORCID = "https://orcid.org/0000-0001-6977-3405"))
-Description: This pacgage contains functions that can take a fasta file, process it, calculate diversity metrics, and use these diversity metrics to predict time since infection (TSI), also known as viremic time.
+Description: This package contains functions that can take a fasta file, process it, calculate diversity metrics, and use these diversity metrics to predict viremic time.
 License: MIT
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
