@@ -100,18 +100,27 @@ predict_viremic_time <- function(
     distances,
     sequence_type,
     hiv_region = c("Matrix", "RT", "gp41", "gp41_and_RT_Mean"),
-    weights_type = "None",
-    diversity_metrics = c("rawMPD", "tn93MPD", "rawPI", "tn93PI")){
+    weights_type = c("None", "UniqueseqsAsis", "UniqueseqsLogTransformed"),
+    diversity_metrics = c("rawMPD", "tn93MPD", "rawPI", "tn93PI", "WFPS", "WFPScodons")){
   
   # assert correct entries
   stopifnot(sequence_type %in% c("outgrowth", "proviruses"))
   stopifnot(hiv_region %in% c("gp41", "RT", "gp41_and_RT_Mean", "Matrix"))
-  stopifnot(weights_type == "None")
+  stopifnot(weights_type %in% c("None", "UniqueseqsAsis", "UniqueseqsLogTransformed"))
   stopifnot(diversity_metrics %in% c("rawMPD", "tn93MPD", "rawPI", "tn93PI", 
-                                     "WFPS", "WFPScodons"))
+                                     "WFPS", "WFPScodons", "APD", "APD3"))
+  
+  # weighted fraction of polymorphic sites (WFPS) is also called APD in some literature
+  # in the data, we have WFPS and WFPScodons
+  diversity_metrics = case_when(
+    diversity_metrics == "APD" ~ "WFPS", 
+    diversity_metrics == "APD3" ~ "WFPScodons",
+    TRUE ~ diversity_metrics)
   
   # make sure distances are correct if using gp41_and_RT mean
-  if (hiv_region == "gp41_and_RT"){
+  if (grepl("gp41", hiv_region) & grepl("RT", hiv_region)){
+    hiv_region == "gp41_and_RT_Mean" # ensure correct formatting
+    
     print("Warning: Please ensure that you are using mean diversity for gp41 and RT.")
   }
   
@@ -155,7 +164,12 @@ predict_viremic_time <- function(
         # keep predictions for weight == "None" & diversity 
         filter(!is.na(hiv_region) & weights_type == "None") %>%
         # keep predictions for good diversity metrics
-        filter(diversity_metric %in% c("rawMPD", "tn93MPD", "rawPI", "tn93PI"))
+        mutate(diversity_metric = case_when(
+          # rename weighted fraction of polymorphic sites - also called APD in some papers
+          diversity_metric == "WFPS" ~ "APD",
+          # rename weighted fraction of polymorphic sites at 3rd codon positions
+          diversity_metric == "WFPS_codons" ~ "APD3",
+          TRUE ~ diversity_metric))
       
       }
       
