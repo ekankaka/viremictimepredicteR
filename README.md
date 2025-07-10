@@ -4,7 +4,6 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
-## Description
 The goal of viremictimepredicteR is to predict viremic time using unique sequence diversity for a specified region of aligned HIV proviral or outgrowth sequences. Predictions are based on markov chain monte carlo samples from Bayesian models fitted by the authors, for these regions and diversity metrics.
 
 ### HIV regions
