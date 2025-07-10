@@ -45,7 +45,7 @@ calculate_distance <- function(dnaset, min_eligible_count = 2){
   tn93PI <- nuc.div(dnabin, model = "TN93")
   
   #calculate weighted fraction of polymorphic sites (WFPS or APD), on DNAStringSet
-  d = diversity_at_each_position(dnaset = notgappy,
+  d = diversity_at_each_position(dnaset = dnaset,
                                  errorthreshold = threshold,
                                  valid_nucleotides = c("A", "C", "G", "T","-") )
   d = unlist(d)
