@@ -152,7 +152,13 @@ predict_viremic_time <- function(
       x_new = distances[[diversity_metrics[j]]]
       
       # weight to use in prediction
-      weight = 1 # all data points carry equal weight
+      uniqueseqs = distances$uniqueseqs
+      
+      weight = case_when(
+        weights_type == "None" ~ 1, # all data points carry equal weight
+        weights_type == "UniqueseqsAsis" ~ uniqueseqs,
+        weights_type == "UniqueseqsLogTransformed" ~ log(uniqueseqs),
+        TRUE ~ NA)
       
       # predict
       res <- predict_y(mcmc_samples = mod_csim, x_new = x_new, weight_new = weight)

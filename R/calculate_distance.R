@@ -29,6 +29,9 @@ calculate_distance <- function(dnaset, min_eligible_count = 2, threshold = 0){
   pass2 = count_eligible_sequences(dnaset, min_eligible_count)
   if (pass2 == FALSE) stop("Remaining sequence count is less than the required minimum.")
   
+  # count of unique eligible sequences
+  uniqueseqs = length(dnaset)
+  
   # convert to dnabin, on DNAbin
   dnabin = dnaStringSet_to_dnabin(dnaset)
   
@@ -58,7 +61,7 @@ calculate_distance <- function(dnaset, min_eligible_count = 2, threshold = 0){
   WFPScodons = mean(d3)
   
   # return result
-  result = c(rawMPD = rawMPD, tn93MPD = tn93MPD, rawPI = rawPI, tn93PI = tn93PI,
+  result = c(uniqueseqs = uniqueseqs, rawMPD = rawMPD, tn93MPD = tn93MPD, rawPI = rawPI, tn93PI = tn93PI,
              WFPS = WFPS, WFPScodons = WFPScodons)
   
   return(result)
