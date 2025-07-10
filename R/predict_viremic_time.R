@@ -161,8 +161,8 @@ predict_viremic_time <- function(
                diversity_metric = diversity_metrics[j], res)
       
       predictions <- data.frame(rbind(predictions, out)) %>% 
-        # keep predictions for weight == "None" & diversity 
-        filter(!is.na(hiv_region) & weights_type == "None") %>%
+        # remove NA rows
+        filter(!is.na(hiv_region)) %>%
         # keep predictions for good diversity metrics
         mutate(diversity_metric = case_when(
           # rename weighted fraction of polymorphic sites - also called APD in some papers
