@@ -168,7 +168,7 @@ predict_viremic_time <- function(
           # rename weighted fraction of polymorphic sites - also called APD in some papers
           diversity_metric == "WFPS" ~ "APD",
           # rename weighted fraction of polymorphic sites at 3rd codon positions
-          diversity_metric == "WFPS_codons" ~ "APD3",
+          diversity_metric == "WFPScodons" ~ "APD3",
           TRUE ~ diversity_metric))
       
       }
