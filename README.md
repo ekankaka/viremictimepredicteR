@@ -34,9 +34,6 @@ We recommend using (in order of preference):
 Other supported weights include:
 - `UniqueseqsAsis` Unique sequence counts, not transformed 
 
-Weights: The currently recommended options include:
-- `None` Model with no weights (all data points carry the same weight = 1)
-
 ## Installation
 
 You can install the development version of viremictimepredicteR from [GitHub](https://github.com/) with: 
@@ -103,8 +100,8 @@ dist_Mean <- (dist_gp41 + dist_RT) / 2
 viremic_time <- predict_viremic_time(distances = dist_Mean, sequence_type = "outgrowth",  
 hiv_region = "gp41_and_RT_Mean")
 
-# Results (predictions for the four recommended diversity metrics, with credible intervals)
-View(viremic_time)
+# preview results
+head(viremic_time)
 
 ```
 
