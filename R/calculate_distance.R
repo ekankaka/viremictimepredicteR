@@ -44,8 +44,20 @@ calculate_distance <- function(dnaset, min_eligible_count = 2){
   # Calculate nucleotide diversity (pi) from TN93 distances, on DNAbin
   tn93PI <- nuc.div(dnabin, model = "TN93")
   
+  #calculate weighted fraction of polymorphic sites (WFPS or APD), on DNAStringSet
+  d = diversity_at_each_position(dnaset = notgappy,
+                                 errorthreshold = threshold,
+                                 valid_nucleotides = c("A", "C", "G", "T","-") )
+  d = unlist(d)
+  WFPS = mean(d)
+  
+  # calculate WFPS at 3rd codon positions (WFPScodons or APD3)
+  d3 <- d[seq(3,length(d),3)]
+  WFPScodons = mean(d3)
+  
   # return result
-  result = c(rawMPD = rawMPD, tn93MPD = tn93MPD, rawPI = rawPI, tn93PI = tn93PI)
+  result = c(rawMPD = rawMPD, tn93MPD = tn93MPD, rawPI = rawPI, tn93PI = tn93PI,
+             WFPS = WFPS, WFPScodons = WFPScodons)
   
   return(result)
 
