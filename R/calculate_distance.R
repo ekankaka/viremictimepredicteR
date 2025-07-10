@@ -8,6 +8,8 @@
 #' 
 #' @param min_eligible_count. Minimum number of eligible sequences to accept
 #' 
+#' #' @param threshold. sequencing error. Recommend 0 if viral outgrowth, 0.01 if DNA
+#' 
 #' @return Returns a list of input parameters and result of different diversity metrics.
 #' Currently supported diversity metrics include:
 #' - mean pairwise distance from the "raw" model (rawMPD)
@@ -20,7 +22,7 @@
 #' dist <- calculate_distance(dnaset = mydnaset, min_eligible_count = 2)
 #'
 #' @export
-calculate_distance <- function(dnaset, min_eligible_count = 2){
+calculate_distance <- function(dnaset, min_eligible_count = 2, threshold = 0){
   
   if (!inherits(dnaset, "DNAStringSet")) stop("Input must be a DNAStringSet")
   
