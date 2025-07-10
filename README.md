@@ -4,28 +4,50 @@
 <!-- badges: start -->
 <!-- badges: end -->
 
+## Description
 The goal of viremictimepredicteR is to predict viremic time using unique sequence diversity for a specified region of aligned HIV proviral or outgrowth sequences. Predictions are based on markov chain monte carlo samples from Bayesian models fitted by the authors, for these regions and diversity metrics.
 
-HIV regions: The currently recommended regions to use include:
-- `gp41` (predict using diversity for the gp41 region of env)
-- `RT` (predict using diversity for the reverse transcriptase region of Pol)
-- `gp41_and_RT_Mean` (predict using mean diversity for the gp41 and RT regions)
-- `Matrix` (Matrix region of gag, especially p17)
+### HIV regions
+We recommend to predict viremic time using mean diversity for the gp41 and RT regions `gp41_and_RT_Mean`.
 
-Diversity metrics: The currently recommended metrics include:
+Other supported regions, ranked in order of performance, include:
+- `RT` (predict using diversity for the reverse transcriptase region of Pol)
+- `gp41` (predict using mean diversity for the gp41 region)
+- `Matrix` (predict using diversity for the Matrix p17 region of gag)
+
+### Diversity metrics
+The currently recommended metrics include:
 - mean pairwise distance from the "raw" model (`rawMPD`)
 - mean pairwise distance from the "TN93" model (`tn93MPD`)
 - nucleotide diversity from the "raw" model (`rawPI`)
 - nucleotide diversity from the "TN93" model (`tn93PI`)
 
+Other supported diversity metrics (not recommended) include:
+- average pairwise diversity (`APD`)
+- average pairwise diversity at 3rd codon positions (`APD3`)
+
+### Weights
+We recommend using (in order of preference):
+- `UniqueseqsLogTransformed` log-transformed unique sequence counts. more stable models even for APD and APD3.
+- `None` all data points carry the same weight = 1. Great fit, but unstable for APD and APD3 and does not account for sequencing depth.
+
+Other supported weights include:
+- `UniqueseqsAsis` Unique sequence counts, not transformed 
+
 Weights: The currently recommended options include:
-- `None`: Model with no weights (all data points carry the same weight = 1)
+- `None` Model with no weights (all data points carry the same weight = 1)
 
 ## Installation
 
 You can install the development version of viremictimepredicteR from [GitHub](https://github.com/) with: 
 
 ``` r
+# Check if devtools is installed; install it if not
+if (!requireNamespace("devtools", quietly = TRUE)) {
+  install.packages("devtools")
+}
+
+# Install the GitHub package
 devtools::install_github("ekankaka/viremictimepredicteR")
 ```
 
